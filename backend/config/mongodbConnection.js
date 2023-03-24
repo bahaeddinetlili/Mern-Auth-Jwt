@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect('mongodb+srv://baha1234:baha1234@project0.76hldlv.mongodb.net/proshop', {
+    const conn = await mongoose.connect('mongodb+srv://baha1234:baha1234@project0.76hldlv.mongodb.net/Mern-Auth-Jwt', {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
