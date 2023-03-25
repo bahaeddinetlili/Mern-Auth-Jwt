@@ -1,11 +1,11 @@
-import { BrowserRouter,Routes,Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
-import {Toaster} from "react-hot-toast" 
+import { Toaster } from "react-hot-toast"
 function App() {
   return (
-    
+
     /*<div className="flex justify-center items-center h-screen flex-col space-y-5">
       <button className="bg-blue-500 py-2 px-5 text-white ">LOGIN</button>
 
@@ -14,20 +14,49 @@ function App() {
 
     </div>
     */
-   <BrowserRouter>
-   <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
-   <Routes>
-<Route path="/" element={<Home/>}/>
-<Route path="/login" element={<Login/>}/>
-<Route path="/register" element={<Register/>}/>
-   </Routes>
-   
-   </BrowserRouter>
-    
+    <BrowserRouter>
+      <Toaster
+        position="top-center"
+        reverseOrder={false} 
+      />
+      <Routes>
+        <Route path="/" element={
+        <ProtectedRoutes>
+          <Home />
+          </ProtectedRoutes>
+        } 
+        />
+        <Route path="/login" element={
+        <PublicRoutes>
+          <Login />
+          </PublicRoutes>
+        } 
+        />
+        <Route path="/register" element={
+        <PublicRoutes>
+          <Register />
+          </PublicRoutes>
+        } />
+      </Routes>
+
+    </BrowserRouter>
+
   );
 }
-
+export function ProtectedRoutes({children}) {
+  const user = localStorage.getItem('user')
+  if ( user !== "" && user ) {
+    return children
+  } else {
+    return <Navigate to='/login' />
+  }
+}
+export function PublicRoutes({children}) {
+  const user = localStorage.getItem('user')
+  if ( user !== "" && user ) {
+    return <Navigate to ="/"/>
+  } else {
+    return children
+  }
+}
 export default App;
