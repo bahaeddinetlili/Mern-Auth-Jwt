@@ -13,10 +13,12 @@ app.use(cors({
 
 app.use(express.json())
 const authRoute = require('./routes/auth')
+const userRoute = require('./routes/user')
 
 
 
-app.use('/api/auth', authRoute)
+app.use('/api/auth/', authRoute)
+app.use('/api/user', userRoute)
 
 app.get('/', (req, res) => res.send('Hello world'))
 const port = 5000

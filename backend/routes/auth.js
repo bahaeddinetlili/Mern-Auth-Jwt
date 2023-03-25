@@ -6,7 +6,7 @@ const User = require('../models/userModel')
 
 const bcrypt = require("bcrypt")
 
-const jwt = require("jsonwebtoken")
+const jwt = require ("jsonwebtoken")
 
 router.post('/register', async (req, res) => {
 
@@ -60,6 +60,7 @@ router.post('/login', async (req, res) => {
     } catch (error) {
 
         res.status(400).send(error)
+        
     }
 
 });
