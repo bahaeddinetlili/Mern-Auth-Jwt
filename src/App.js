@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast"
+import VerifyEmail from "./pages/VerifyEmail.js";
 function App() {
   return (
 
@@ -35,6 +36,11 @@ function App() {
         <Route path="/register" element={
         <PublicRoutes>
           <Register />
+          </PublicRoutes>
+        } />
+             <Route path="/VerifyEmail/:token" element={
+        <PublicRoutes>
+          <VerifyEmail />
           </PublicRoutes>
         } />
       </Routes>
