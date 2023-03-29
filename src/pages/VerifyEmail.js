@@ -10,7 +10,7 @@ function VerifyEmail() {
 const verifyToken= async() => {
     try {
         toast.loading()
-     const response =   await axios.post("/api/auth/verfiyemail",{token: params.token});
+     const response =   await axios.post("/api/auth/verifyemail",{token: params.token});
      if(response.data.success) {
        setEmailVerified("true") 
      } else {

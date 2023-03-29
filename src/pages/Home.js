@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 const Home = () => {
   /*const user = JSON.parse(localStorage.getItem('user'))
@@ -53,7 +53,9 @@ const Home = () => {
   return (
     userInfo !== null && <div className="flex items-center justify-center min-h-screen ">
       <h1 className='text-5xl font-semibold text-primary'>{userInfo?.email}</h1>
+      <Link className='underline text-secondary' to='/login'>Log out</Link>
     </div>
+    
   )
 }
 
