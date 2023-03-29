@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
 
         const newuser = new User(req.body)
         const result = await newuser.save()
-        await sendEmail(result, "verify-email")
+        await sendEmail(result, "verifyemail")
         res.status(200).send({ success: true, message: ' Registeration successfully ,Please Verify your email' })
 
     } catch (error) {
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
 
             const passwordsMashed = await bcrypt.compare(req.body.password, user.password)
             if (passwordsMashed) {
-                if(user.isVerified) {
+                if (user.isVerified) {
                     const dataToBeSentToFrontEnd = { _id: user._id, email: user.email, name: user.name }
 
                     const token = jwt.sign(dataToBeSentToFrontEnd, 'SHEY', {
@@ -55,11 +55,11 @@ router.post('/login', async (req, res) => {
                     });
                     res.status(200).send({ success: true, message: 'User Login successfull', data: token })
 
-                }else {
+                } else {
                     res.status(200).send({ success: false, message: 'Email not Verified' })
 
                 }
-             
+
             } else
                 res.status(200).send({ success: false, message: 'Incorrect Password' })
 
@@ -75,20 +75,56 @@ router.post('/login', async (req, res) => {
     }
 
 });
+router.post("/send-password-reset-link", async (req, res) => {
 
-router.post("/verfiyemail", async (req, res) => {
+    try {
+        const result =  await  User.findOne({ email: req.body.email })
+        await sendEmail(result, "resetpassword")
+        res.send({ success: true, message: "password reset link sent to your email successfuly" })
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+router.post("/verifyemail", async (req, res) => {
     try {
         console.log(req.body.token)
         const tokenData = await Token.findOne({ token: req.body.token })
         if (tokenData) {
             await User.findOneAndUpdate({
                 _id: tokenData.userid,
-                    
+
                 isVerified
                     : true
             })
             await Token.findOneAndDelete({ token: req.body.token })
             res.send({ success: true, message: 'Email Verified Successfuly' })
+        }
+        else {
+            res.send({ success: false, message: 'Invalid token' })
+
+        }
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+router.post("/reset-password", async (req, res) => {
+    try {
+        const tokenData = await Token.findOne({ token: req.body.token })
+        if (tokenData) {
+            const password = req.body.password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+            await User.findOneAndUpdate({
+                _id: tokenData.userid,
+
+                password
+                    : hashedPassword
+            })
+            await Token.findOneAndDelete({ token: req.body.token })
+            res.send({ success: true, message: 'password Reset Successfull' })
         }
         else {
             res.send({ success: false, message: 'Invalid token' })
